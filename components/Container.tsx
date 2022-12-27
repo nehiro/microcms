@@ -6,11 +6,21 @@ type OuterContainer = {
   children: ReactNode;
   props: HTMLStyleElement;
 };
+type InnerContainer = {
+  className: string;
+  children: ReactNode;
+  props: HTMLStyleElement;
+};
+type Container = {
+  children: ReactNode;
+  props: HTMLStyleElement;
+};
 
 const OuterContainer = forwardRef(function OuterContainer(
   { className, children, ...props }: OuterContainer,
-  ref: any
+  ref
 ) {
+  console.log({ ...props }, '...props');
   return (
     <div ref={ref} className={clsx('sm:px-8', className)} {...props}>
       <div className="mx-auto max-w-7xl lg:px-8">{children}</div>
@@ -19,7 +29,7 @@ const OuterContainer = forwardRef(function OuterContainer(
 });
 
 const InnerContainer = forwardRef(function InnerContainer(
-  { className, children, ...props },
+  { className, children, ...props }: InnerContainer,
   ref
 ) {
   return (
@@ -34,7 +44,7 @@ const InnerContainer = forwardRef(function InnerContainer(
 });
 
 export const Container = forwardRef(function Container(
-  { children, ...props },
+  { children, ...props }: Container,
   ref
 ) {
   return (
