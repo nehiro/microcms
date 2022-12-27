@@ -1,10 +1,10 @@
-import { forwardRef, LegacyRef, ReactNode, Ref, RefObject } from 'react';
+import { forwardRef, LegacyRef, ReactNode, Ref, RefObject, PropsWithoutRef } from 'react';
 import clsx from 'clsx';
 
 type OuterContainer = {
   className: string;
   children: ReactNode;
-  props: HTMLStyleElement;
+  // props: HTMLStyleElement;
 };
 type InnerContainer = {
   className: string;
@@ -16,8 +16,8 @@ type Container = {
   props: HTMLStyleElement;
 };
 
-const OuterContainer = forwardRef(function OuterContainer(
-  { className, children, ...props }: OuterContainer,
+const OuterContainerComponent = forwardRef<HTMLDivElement, OuterContainer & PropsWithoutRef<JSX.IntrinsicElements['div']>>(function OuterContainer(
+  { className, children, ...props },
   ref
 ) {
   console.log({ ...props }, '...props');
@@ -28,31 +28,32 @@ const OuterContainer = forwardRef(function OuterContainer(
   );
 });
 
-const InnerContainer = forwardRef(function InnerContainer(
-  { className, children, ...props }: InnerContainer,
-  ref
+const InnerContainerComponent = forwardRef(function InnerContainer(
+  { children }: { children: ReactNode },
+  // { className, children, ...props }: InnerContainer,
+  // ref
 ) {
   return (
     <div
-      ref={ref}
-      className={clsx('relative px-4 sm:px-8 lg:px-12', className)}
-      {...props}
+      // ref={ref}
+      // className={clsx('relative px-4 sm:px-8 lg:px-12', className)}
+      // {...props}
     >
       <div className="mx-auto max-w-2xl lg:max-w-5xl">{children}</div>
     </div>
   );
 });
 
-export const Container = forwardRef(function Container(
+export const Container = forwardRef(function ContainerRender(
   { children, ...props }: Container,
   ref
 ) {
   return (
-    <OuterContainer ref={ref} {...props}>
-      <InnerContainer>{children}</InnerContainer>
-    </OuterContainer>
+    <OuterContainerComponent ref={ref} {...props}>
+      <InnerContainerComponent>{children}</InnerContainerComponent>
+    </OuterContainerComponent>
   );
 });
 
-Container.Outer = OuterContainer;
-Container.Inner = InnerContainer;
+Container.Outer = OuterContainerComponent;
+Container.Inner = InnerContainerComponent;
